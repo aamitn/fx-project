@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "appsettings*.json": "jsonc"
+    },
+
+    "editor.fontSize": 15,
+}

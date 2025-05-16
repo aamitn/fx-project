@@ -1,0 +1,12 @@
+@fx_backend_HostAddress = http://localhost:5227
+
+GET {{fx_backend_HostAddress}}/api/HeatQuantity
+Accept: application/json
+
+POST {{fx_backend_HostAddress}}/api/HeatQuantity/calculate
+Content-Type: application/json
+
+
+###
+
+###

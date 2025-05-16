@@ -1,0 +1,81 @@
+
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.temp-gradient {
+  background: linear-gradient(90deg, #ff4d4d, #ffec80, #4da6ff);
+}
+
+.input-unit {
+  @apply bg-gray-100 px-2 py-1 rounded text-gray-600 text-sm flex items-center;
+}
+
+/* Material Design Shadows */
+.shadow-1 {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.shadow-2 {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.shadow-3 {
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+/* Transitions */
+.transition-standard {
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+
+.hover-card:hover {
+  @apply shadow-2 transition-standard;
+}
+
+/* Better form elements */
+.form-group {
+  @apply mb-4;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+/* Button variations */
+.btn-primary {
+  @apply bg-app-blue text-white hover:bg-app-blue-dark transition-colors;
+}
+
+.btn-outline {
+  @apply border border-app-blue text-app-blue hover:bg-app-blue hover:text-white transition-colors;
+}
+
+.btn-ghost {
+  @apply text-app-blue hover:bg-blue-50 transition-colors;
+}
+
+/* Table styles */
+.table-standard {
+  @apply w-full border-collapse;
+}
+
+.table-standard th {
+  @apply px-4 py-2 text-left text-sm font-medium text-gray-600 bg-gray-50;
+}
+
+.table-standard td {
+  @apply px-4 py-2 border-t border-gray-200;
+}
+
+.table-standard tr:hover {
+  @apply bg-gray-50;
+}
+
+/* Better focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-app-blue focus:ring-opacity-50;
+}
