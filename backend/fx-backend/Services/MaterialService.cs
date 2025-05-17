@@ -18,9 +18,11 @@ namespace fx_backend.Services
         public async Task<List<string>> GetAllMaterialTypesAsync()
         {
             return await _dbContext.Materials
-                .Select(m => m.MaterialType)
-                .Distinct()
-             // .OrderBy(m => _dbContext.Materials.FirstOrDefault(x => x.MaterialType == m)!.Id) // Order by db id and not alphabetic order
+                .GroupBy(m => m.MaterialType)
+                .Select(g => new { MaterialType = g.Key, MinId = g.Min(m => m.Id) })
+                //.OrderBy(g => g.MinId)       // Use this to sort by ID
+                .OrderBy(g => g.MaterialType) // Use this to sort alphabetically
+                .Select(g => g.MaterialType)
                 .ToListAsync();
         }
         
