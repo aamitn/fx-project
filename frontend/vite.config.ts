@@ -11,7 +11,15 @@ export default defineConfig(({ mode }) => ({
 	allowedHosts: [
 	"furnx.bitmutex.com",
 	"localhost"
-	]
+	],
+  cors: {
+    // the origin you will be accessing via browser
+    origin: [
+      "http://localhost:5227",
+      "http://localhost",
+      "https://furnx-backend.bitmutex.com"
+    ]
+    },
   },
   plugins: [
     react(),

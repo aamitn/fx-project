@@ -38,6 +38,21 @@ namespace fx_backend.Controllers
             });
         }
 
+        // GET handler at baseroute/materials
+        [HttpGet("materials")]
+        public async Task<ActionResult<IEnumerable<string>>> GetMaterialTypes()
+        {
+            try
+            {
+                var materialTypes = await _materialService.GetAllMaterialTypesAsync();
+                return Ok(materialTypes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return StatusCode(500, "Failed to retrieve material types.");
+            }
+        }
 
         // POST handler at baseroute/calculate
         [HttpPost("calculate")]

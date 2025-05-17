@@ -26,8 +26,8 @@ export const sendCalculation = async (
     console.log(`Calculation Data:`,  calculationData);
     
     // const response = await fetch(`http://localhost:5000/${calculationType}`, {
-   // const response = await fetch(`http://localhost:5227/api/${calculationType}/calculate`, {
-   const response = await fetch(`https://furnx-backend.bitmutex.com/api/${calculationType}/calculate`, {
+    const response = await fetch(`http://localhost:5227/api/${calculationType}/calculate`, {
+   //const response = await fetch(`https://furnx-backend.bitmutex.com/api/${calculationType}/calculate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,5 +86,19 @@ const getMockResults = (calculationType: string): Record<string, any> => {
       return {
         "Result": "No data available for this calculation type"
       };
+  }
+};
+
+
+export const fetchMaterialOptions = async () => {
+  try {
+    const response = await fetch('http://localhost:5227/api/heat-quantity/materials');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Could not fetch material options:", error);
+    return ["Error1", "Error2"]; // Default list on error
   }
 };

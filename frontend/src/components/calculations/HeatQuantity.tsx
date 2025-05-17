@@ -1,6 +1,7 @@
-// HeatQuantity.tsx
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { fetchMaterialOptions } from "@/utils/api"; // Import the utility function
 
 interface HeatQuantityProps {
   results?: any;
@@ -11,8 +12,16 @@ export const HeatQuantity = ({ results }: HeatQuantityProps) => {
   const [initialTemperature, setInitialTemperature] = useState<number | undefined>();
   const [finalTemperature, setFinalTemperature] = useState<number | undefined>();
   const [materialType, setMaterialType] = useState<string>("");
+  const [materialOptions, setMaterialOptions] = useState<string[]>([]);
 
+  useEffect(() => {
+    const getMaterialOptions = async () => {
+      const options = await fetchMaterialOptions();
+      setMaterialOptions(options);
+    };
 
+    getMaterialOptions();
+  }, []);
 
   return (
     <div className="border rounded-md p-4 mb-4">
@@ -62,17 +71,20 @@ export const HeatQuantity = ({ results }: HeatQuantityProps) => {
 
         <div>
           <label htmlFor="materialType" className="block text-sm text-gray-600 mb-1">Material Type</label>
-          <Input
-            type="text"
-            id="materialType"
-            value={materialType}
-            onChange={(e) => setMaterialType(e.target.value)}
-            className="flex-1"
-            required 
-          />
+          <Select value={materialType} onValueChange={setMaterialType}>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select material" />
+            </SelectTrigger>
+            <SelectContent>
+              {materialOptions.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
-
 
       {results && (
         <div className="mt-4 p-3 bg-gray-50 rounded-md border">

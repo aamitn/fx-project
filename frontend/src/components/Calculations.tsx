@@ -9,7 +9,7 @@ import { getToastMessage } from "./calculations/CalculationUtils";
 import { sendCalculation } from "@/utils/api";
 
 const Calculations = () => {
-  const [selectedTabs, setSelectedTabs] = useState(["personnel-protection"]);
+  const [selectedTabs, setSelectedTabs] = useState(["heat-quantity"]);
   const [isCalculating, setIsCalculating] = useState(false);
   const [calculationResults, setCalculationResults] = useState<Record<string, any>>({});
   const { toast } = useToast();
