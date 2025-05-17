@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,7 +25,7 @@ export const HeatQuantity = ({ results }: HeatQuantityProps) => {
   }, []);
 
   return (
-    <div className="border rounded-md p-4 mb-4">
+    <div className="border rounded-md p-4 mb-4" data-tab="heat-quantity">
       <h3 className="font-medium mb-4">Heat Quantity Calculation</h3>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
         <div>
@@ -71,18 +72,25 @@ export const HeatQuantity = ({ results }: HeatQuantityProps) => {
 
         <div>
           <label htmlFor="materialType" className="block text-sm text-gray-600 mb-1">Material Type</label>
-          <Select value={materialType} onValueChange={setMaterialType}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select material" />
-            </SelectTrigger>
-            <SelectContent>
-              {materialOptions.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <input 
+            type="hidden" 
+            id="materialType" 
+            value={materialType}
+          />
+          <div className="w-full">
+            <Select value={materialType} onValueChange={setMaterialType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select material" />
+              </SelectTrigger>
+              <SelectContent>
+                {materialOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 

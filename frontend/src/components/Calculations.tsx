@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs } from "@/components/ui/tabs";
@@ -44,7 +43,6 @@ const Calculations = () => {
       if (!tabElement) return;
       
       const inputs = tabElement.querySelectorAll('input');
-      const selects = tabElement.querySelectorAll('select');
       
       const tabData: Record<string, any> = {};
       
@@ -54,15 +52,10 @@ const Calculations = () => {
         }
       });
       
-      selects.forEach(select => {
-        if (select.id) {
-          tabData[select.id] = select.value;
-        }
-      });
-      
       formData[tab] = tabData;
     });
     
+    console.log("Collected form data:", formData);
     return formData;
   };
 
@@ -116,7 +109,7 @@ const Calculations = () => {
       <CalculationTypeButtons selectedTabs={selectedTabs} toggleTab={toggleTab} />
       
       <div>
-        <Tabs defaultValue="personnel-protection">
+        <Tabs defaultValue="heat-quantity">
           <CalculationTabs 
             selectedTabs={selectedTabs} 
             calculationResults={calculationResults}

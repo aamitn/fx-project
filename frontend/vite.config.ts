@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
 	"localhost"
 	],
   cors: {
-    // the origin you will be accessing via browser
+    // the origin you will be accessing via browser for req from frontend to backend
     origin: [
       "http://localhost:5227",
       "http://localhost",
