@@ -17,13 +17,26 @@ The FurnX Backend is a .NET 9.0 WebAPI (OpenAPI Compatible) application providin
 
 ## Building the Project
 
-To build the project, navigate to the root directory containing the `fx-backend.csproj` file and run the following command:
+- To build the project, navigate to the root directory containing the `fx-backend.csproj` file and run the following command:
 
 ```bash
 dotnet clean
-dotnet build
+dotnet build 
 ```
-
+- Build with Configuration 
+```bash
+dotnet build -c debug
+OR
+dotnet build -c release
+```
+- Publish for Deployment
+```bash
+dotnet publish
+OR
+dotnet publish -c debug
+OR
+dotnet publish -c release
+```
 This command compiles the source code and generates the necessary binaries in the `bin` directory.
 
 ## Running the Project
@@ -37,7 +50,7 @@ dotnet run // If inside fx-backend directory
 ```
 
 - This command starts the application, which listens for incoming requests on the configured port (typically 5227)
-- Visit [http://localhost:5227/api/HeatQuantity](http://localhost:5227/api/HeatQuantity) to check.
+- Visit [http://localhost:5227/api/heat-quantity](http://localhost:5227/api/heat-quantity) to check.
 
 
 ## Debugging the Project
@@ -104,25 +117,44 @@ dotnet ef database update  // If inside fx-backend directory
 
 This command updates the database schema to match the latest migration.
 
+## API Documantaion
+
+- OpenAPI Documantation at : [http://localhost:5227/openapi/v1.json](http://localhost:5227/openapi/v1.json)
+- Swagger UI at : [http://localhost:5227/api-docs/](http://localhost:5227/api-docs)
+
 ## API Endpoints
 
-#### Test API Endpint fr checking status
+#### Test API Endpoint for checking status
 
--   **Endpoint:** `GET api/HeatQuantity`
+-   **Endpoint:** `GET api/heat-quantity`
 -   **Description:** Test Endpoint that returns data if api is running
 
 
 -   **Example Request:**
 
 ```bash
-curl --location --request GET 'http://localhost:5227/api/HeatQuantity'
+curl --location --request GET 'http://localhost:5227/api/heat-quantity'
+```
+
+
+
+#### Endpoint for fetching material list
+
+-   **Endpoint:** `GET api/heat-quantity/materials`
+-   **Description:** Get list of materials form DB
+
+
+-   **Example Request:**
+
+```bash
+curl --location --request GET 'http://localhost:5227/api/heat-quantity/materials'
 ```
 
 
 
 #### Heat Quantity Calculation 
 
--   **Endpoint:** `POST /api/HeatQuantity/calculate`
+-   **Endpoint:** `POST /api/heat-quantity/calculate`
 -   **Description:** Calculates Heat Quantity(Q) with formula Q = mCp∆T
 -   **Request Body:**
 
@@ -138,7 +170,7 @@ curl --location --request GET 'http://localhost:5227/api/HeatQuantity'
 -   **Example Request:**
 
 ```bash
-curl --location --request POST 'http://localhost:5227/api/HeatQuantity/calculate' \
+curl --location --request POST 'http://localhost:5227/api/heat-quantity/calculate' \
 --header 'Content-Type: application/json' \
 --data '{
   "mass": 5,

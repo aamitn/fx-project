@@ -1,11 +1,13 @@
 @fx_backend_HostAddress = http://localhost:5227
 
-GET {{fx_backend_HostAddress}}/api/HeatQuantity
+GET {{fx_backend_HostAddress}}/api/heat-quantity
 Accept: application/json
 
-POST {{fx_backend_HostAddress}}/api/HeatQuantity/calculate
+POST {{fx_backend_HostAddress}}/api/heat-quantity/calculate
 Content-Type: application/json
 
+GET {{fx_backend_HostAddress}}/api/heat-quantity/materials
+Accept: application/json
 
 ###
 
