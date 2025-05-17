@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+	// the hostname of the frontend 
 	allowedHosts: [
 	"furnx.bitmutex.com",
 	"localhost"
