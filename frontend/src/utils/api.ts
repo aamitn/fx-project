@@ -9,42 +9,65 @@
  * @param calculationData The calculation input data
  * @returns Promise with the calculation results
  */
-export const sendCalculation = async (
-  calculationType: string,
-  calculationData: Record<string, any>
-): Promise<any> => {
-  try {
-    // For development/testing: return mock data if the API is not available
-    // This helps prevent network errors when the backend is not running
-    const useMockData = false; // Set to false in production
-    
-    if (useMockData) {
-      console.log(`Sending calculation data to API (mock): ${calculationType}`, calculationData);
-      return getMockResults(calculationType);
-    }
-    console.log(`Calculation Type:`,  calculationType);
-    console.log(`Calculation Data:`,  calculationData);
-    
-    // const response = await fetch(`http://localhost:5000/${calculationType}`, {
-    const response = await fetch(`http://localhost:5227/api/${calculationType}/calculate`, {
-   //const response = await fetch(`https://furnx-backend.bitmutex.com/api/${calculationType}/calculate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(calculationData),
-    });
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status} ${response.statusText}`);
-    }
+// Public API URL ENV Must Start with VITE_
+//const baseUrl =`http://localhost:5227/`
+const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5227';
 
-    return await response.json();
-  } catch (error) {
-    console.error("Error sending calculation:", error);
-    throw error;
-  }
-};
+
+  export const sendCalculation = async (
+    calculationType: string,
+    calculationData: Record<string, any>
+  ): Promise<any> => {
+    try {
+      const useMockData = false; // Set to true for development/testing
+
+      if (useMockData) {
+        console.log(`Sending calculation data to API (mock): ${calculationType}`, calculationData);
+        return getMockResults(calculationType);
+      }
+
+      const endpoint = `${baseUrl}/api/${calculationType}/calculate`;
+
+      console.log(`ENDPOINT URL FOR CALCULATE IS: ${endpoint}`);
+      console.log(`Calculation Type:`, calculationType);
+      console.log(`Calculation Data:`, calculationData);
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(calculationData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Error sending calculation:", error);
+      throw error;
+    }
+  };
+
+  export const fetchMaterialOptions = async () => {
+    try {
+
+      const endpoint = `${baseUrl}/api/heat-quantity/materials`;
+      console.log(`ENDPOINT URL FOR MATERIAL LIST IS: ${endpoint}`);
+
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Could not fetch material options:", error);
+      return ["Error1", "Error2"]; // Default list on error
+    }
+  };
 
 /**
  * Generate mock results for development/testing when backend is not available
@@ -89,16 +112,3 @@ const getMockResults = (calculationType: string): Record<string, any> => {
   }
 };
 
-
-export const fetchMaterialOptions = async () => {
-  try {
-    const response = await fetch('http://localhost:5227/api/heat-quantity/materials');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Could not fetch material options:", error);
-    return ["Error1", "Error2"]; // Default list on error
-  }
-};

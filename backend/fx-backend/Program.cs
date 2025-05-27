@@ -31,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Use MS-SQL Server as the database provider
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HillServerDbConnection"))); 
 
 // Register MaterialService
 builder.Services.AddScoped<fx_backend.Services.MaterialService>();
@@ -42,9 +42,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("MyCorsPolicy", builder =>
     {
         builder.WithOrigins(
-		"http://localhost:8080",
-		"https://furnx.bitmutex.com"
-		)
+		"http://localhost:8080", // Vite Dev Server
+        "http://localhost:4173", //Vite Build Server
+        "http://sknandi-001-site2.jtempurl.com" // Production Server
+        )
                .AllowAnyHeader()
                .AllowAnyMethod();
     });
@@ -55,19 +56,19 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "FurnX API V1");
-        c.RoutePrefix = "api-docs";
+        c.RoutePrefix = string.Empty; // Serve Swagger UI at application root, use "path" to serve in /path
         c.DocumentTitle = "FurnX API Documentation";
     });
     app.MapOpenApi();
-}
+//}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // Enable routing
 app.UseRouting();
