@@ -105,6 +105,16 @@ const getMockResults = (calculationType: string): Record<string, any> => {
         "Energy Savings": "45000 kWh/yr",
         "CO₂ Reduction": "12.5 tons/yr"
       };
+
+    case 'heat-quantity':
+      return {
+        "Mass": "250",
+        "Initial Temperature": "35",
+        "Final Temperature": "2.8 years",
+        "Material Type": "Wood",
+        "Heat Quantity Result"  : "5000 J"
+      };
+      
     default:
       return {
         "Result": "No data available for this calculation type"
