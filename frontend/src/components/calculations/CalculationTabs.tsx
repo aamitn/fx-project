@@ -1,11 +1,11 @@
-
 import { TabsContent } from "@/components/ui/tabs";
 import { PersonnelProtection } from "./PersonnelProtection";
 import { CondensationControl } from "./CondensationControl";
 import { EnvironmentalImpact } from "./EnvironmentalImpact";
 import { Efficiency } from "./Efficiency";
-import { HeatQuantity } from "./HeatQuantity"; 
-
+import { HeatQuantity } from "./HeatQuantity";
+import { HeatLoss } from "./HeatLoss";
+import { useInsulation } from "@/contexts/InsulationContext";
 
 interface CalculationTabsProps {
   selectedTabs: string[];
@@ -16,8 +16,18 @@ export const CalculationTabs = ({
   selectedTabs, 
   calculationResults = {} 
 }: CalculationTabsProps) => {
+  const { layers } = useInsulation();
   return (
     <div className="mt-4">
+
+      {selectedTabs.includes("heat-quantity") && (
+        <TabsContent value="heat-quantity" className="mt-0" forceMount>
+          <div data-tab="heat-quantity">
+            <HeatQuantity results={calculationResults["heat-quantity"]} />
+          </div>
+        </TabsContent>
+      )}
+
       {selectedTabs.includes("personnel-protection") && (
         <TabsContent value="personnel-protection" className="mt-0" forceMount>
           <div data-tab="personnel-protection">
@@ -49,15 +59,14 @@ export const CalculationTabs = ({
           </div>
         </TabsContent>
       )}
-
-      {selectedTabs.includes("heat-quantity") && (
-        <TabsContent value="heat-quantity" className="mt-0" forceMount>
-          <div data-tab="heat-quantity">
-            <HeatQuantity results={calculationResults["heat-quantity"]} />
+      {selectedTabs.includes("heat-loss") && (
+        <TabsContent value="heat-loss" className="mt-0" forceMount>
+          <div data-tab="heat-loss">
+            <HeatLoss results={calculationResults["heat-loss"]} layers={layers}/>
           </div>
         </TabsContent>
       )}
-      
+
     </div>
   );
 };

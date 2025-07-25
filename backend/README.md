@@ -124,62 +124,7 @@ This command updates the database schema to match the latest migration.
 
 ## API Endpoints
 
-#### Test API Endpoint for checking status
-
--   **Endpoint:** `GET api/heat-quantity`
--   **Description:** Test Endpoint that returns data if api is running
-
-
--   **Example Request:**
-
-```bash
-curl --location --request GET 'http://localhost:5227/api/heat-quantity'
-```
-
-
-
-#### Endpoint for fetching material list
-
--   **Endpoint:** `GET api/heat-quantity/materials`
--   **Description:** Get list of materials form DB
-
-
--   **Example Request:**
-
-```bash
-curl --location --request GET 'http://localhost:5227/api/heat-quantity/materials'
-```
-
-
-
-#### Heat Quantity Calculation 
-
--   **Endpoint:** `POST /api/heat-quantity/calculate`
--   **Description:** Calculates Heat Quantity(Q) with formula Q = mCp∆T
--   **Request Body:**
-
-```json
-{
-  "mass": 5,
-  "initialTemperature": 20,
-  "finalTemperature": 1200,
-  "MaterialType" : "wood"
-}
-```
-
--   **Example Request:**
-
-```bash
-curl --location --request POST 'http://localhost:5227/api/heat-quantity/calculate' \
---header 'Content-Type: application/json' \
---data '{
-  "mass": 5,
-  "initialTemperature": 20,
-  "finalTemperature": 1200,
-  "MaterialType" : "oak wood"
-}'
-```
-
+All Endpoint info at `./fx-backend/fx-backend.http`
 
 
 ## Contributing

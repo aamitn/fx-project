@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 
 type CalculationType = {
@@ -12,11 +11,12 @@ interface CalculationTypeButtonsProps {
 }
 
 const calculationTypes: CalculationType[] = [
+  { id: "heat-loss", label: "Heat Loss" },
+  { id: "heat-quantity", label: "Heat Quantity" },
   { id: "personnel-protection", label: "Personnel Protection" },
   { id: "condensation-control", label: "Condensation Control" },
   { id: "environmental-impact", label: "Environmental Impact" },
-  { id: "efficiency", label: "Efficiency" },
-  { id: "heat-quantity", label: "Heat Quantity" }
+  { id: "efficiency", label: "Efficiency" }
 ];
 
 export const CalculationTypeButtons = ({

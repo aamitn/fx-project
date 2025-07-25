@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
   // Retrieve VITE_API_BASE_URL from environment variables
   const apiBaseUrl = env.VITE_API_BASE_URL;
 
-  // Define your preset CORS origins
+  // Define your preset CORS origins (BACKEND API BASE URLs) [MANUAL]
   const presetCorsOrigins = [
     "http://localhost:5227",
     "http://localhost:5000",
@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
     presetCorsOrigins.push(apiBaseUrl);
   }
 
-  // Define your preset allowed hosts
+  // Define your preset allowed hosts (FRONTEND URLs) [MANUAL]
   const presetAllowedHosts = ["furnx.bitmutex.com", "localhost"];
 
   // Retrieve additional allowed hosts from environment variable
