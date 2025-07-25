@@ -39,15 +39,15 @@ jobs:
       - name: Zip Backend Build Artifacts
         run: |
           echo "Zipping backend build artifacts..."
-          # Navigate to the root of the repository before zipping
-          cd ${{ github.workspace }}
           # Define the source path for backend artifacts relative to the repository root
-          # Note: The 'publish' directory is now part of the path
           BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish"
-          BACKEND_ZIP_FILE="backend_dist.zip"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist.zip" # Full path to the output zip file
 
           if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
-            zip -r "$BACKEND_ZIP_FILE" "$BACKEND_ARTIFACTS_SOURCE"
+            # Change to the artifacts source directory to zip its contents directly
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            # Zip contents of the current directory ('.') into the specified output zip file
+            zip -r "$BACKEND_ZIP_FILE" .
             echo "Backend artifacts zipped to $BACKEND_ZIP_FILE"
           else
             echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
@@ -76,14 +76,15 @@ jobs:
       - name: Zip Frontend Build Artifacts
         run: |
           echo "Zipping frontend build artifacts..."
-          # Navigate to the root of the repository before zipping
-          cd ${{ github.workspace }}
           # Define the source path for frontend artifacts relative to the repository root
           FRONTEND_ARTIFACTS_SOURCE="frontend/dist"
-          FRONTEND_ZIP_FILE="frontend_dist.zip"
+          FRONTEND_ZIP_FILE="${{ github.workspace }}/frontend_dist.zip" # Full path to the output zip file
 
           if [ -d "$FRONTEND_ARTIFACTS_SOURCE" ]; then
-            zip -r "$FRONTEND_ZIP_FILE" "$FRONTEND_ARTIFACTS_SOURCE"
+            # Change to the artifacts source directory to zip its contents directly
+            cd "$FRONTEND_ARTIFACTS_SOURCE"
+            # Zip contents of the current directory ('.') into the specified output zip file
+            zip -r "$FRONTEND_ZIP_FILE" .
             echo "Frontend artifacts zipped to $FRONTEND_ZIP_FILE"
           else
             echo "Warning: Frontend build output directory '$FRONTEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
