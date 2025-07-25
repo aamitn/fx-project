@@ -1,0 +1,95 @@
+name: Build and Zip Backend & Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: # Allows manual triggering of the workflow
+
+jobs:
+  build-and-zip:
+    runs-on: ubuntu-latest # Using Ubuntu for the runner environment
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4 # Action to checkout your code
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x' # Installs the latest .NET 9 SDK
+
+      - name: Build and Publish .NET Backend
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend project for Release configuration and net9.0 target framework..."
+          # Using 'dotnet publish' instead of 'dotnet build' as requested
+          # The -o (output) flag ensures artifacts are placed in the specified 'publish' subdirectory
+          dotnet publish --configuration Release --framework net9.0 --output ./bin/Release/net9.0/publish
+
+      - name: Zip Backend Build Artifacts
+        run: |
+          echo "Zipping backend build artifacts..."
+          # Navigate to the root of the repository before zipping
+          cd ${{ github.workspace }}
+          # Define the source path for backend artifacts relative to the repository root
+          # Note: The 'publish' directory is now part of the path
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish"
+          BACKEND_ZIP_FILE="backend_dist.zip"
+
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            zip -r "$BACKEND_ZIP_FILE" "$BACKEND_ARTIFACTS_SOURCE"
+            echo "Backend artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use a stable Node.js version, e.g., 20.x
+          # You can specify a package manager here if needed, e.g., cache: 'npm' or cache: 'pnpm'
+
+      - name: Install Frontend Dependencies (npm)
+        run: |
+          echo "Navigating to frontend directory: frontend"
+          cd frontend
+          echo "Installing frontend dependencies using npm..."
+          npm install # Using npm as the default package manager
+
+      - name: Build Frontend Application
+        run: |
+          echo "Navigating to frontend directory: frontend"
+          cd frontend
+          echo "Building frontend application..."
+          npm run build # Assumes your package.json has a 'build' script
+
+      - name: Zip Frontend Build Artifacts
+        run: |
+          echo "Zipping frontend build artifacts..."
+          # Navigate to the root of the repository before zipping
+          cd ${{ github.workspace }}
+          # Define the source path for frontend artifacts relative to the repository root
+          FRONTEND_ARTIFACTS_SOURCE="frontend/dist"
+          FRONTEND_ZIP_FILE="frontend_dist.zip"
+
+          if [ -d "$FRONTEND_ARTIFACTS_SOURCE" ]; then
+            zip -r "$FRONTEND_ZIP_FILE" "$FRONTEND_ARTIFACTS_SOURCE"
+            echo "Frontend artifacts zipped to $FRONTEND_ZIP_FILE"
+          else
+            echo "Warning: Frontend build output directory '$FRONTEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: backend_dist.zip # Path relative to the repository root
+
+      - name: Upload Frontend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend_dist.zip # Path relative to the repository root
