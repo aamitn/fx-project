@@ -27,89 +27,191 @@ jobs:
         with:
           dotnet-version: '9.x' # Installs the latest .NET 9 SDK
 
-      - name: Build and Publish .NET Backend
+      # --- Backend Build and Zip for Linux (Framework-Dependent) ---
+      - name: Build and Publish .NET Backend (Linux - Framework-Dependent)
         run: |
           echo "Navigating to backend directory: backend/fx-backend"
           cd backend/fx-backend
-          echo "Publishing .NET backend project for Release configuration and net9.0 target framework..."
-          # Using 'dotnet publish' instead of 'dotnet build' as requested
-          # The -o (output) flag ensures artifacts are placed in the specified 'publish' subdirectory
-          dotnet publish --configuration Release --framework net9.0 --output ./bin/Release/net9.0/publish
+          echo "Publishing .NET backend for Linux (Framework-Dependent)..."
+          # Default publish on Ubuntu runner without --runtime creates Linux FDD
+          dotnet publish --configuration Release --framework net9.0 --output ./bin/Release/net9.0/publish/linux-fd
 
-      - name: Zip Backend Build Artifacts
+      - name: Zip Backend Linux (Framework-Dependent) Artifacts
         run: |
-          echo "Zipping backend build artifacts..."
-          # Define the source path for backend artifacts relative to the repository root
-          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish"
-          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist.zip" # Full path to the output zip file
-
+          echo "Zipping backend Linux (Framework-Dependent) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/linux-fd"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_linux.zip"
           if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
-            # Change to the artifacts source directory to zip its contents directly
             cd "$BACKEND_ARTIFACTS_SOURCE"
-            # Zip contents of the current directory ('.') into the specified output zip file
             zip -r "$BACKEND_ZIP_FILE" .
-            echo "Backend artifacts zipped to $BACKEND_ZIP_FILE"
+            echo "Backend Linux (Framework-Dependent) artifacts zipped to $BACKEND_ZIP_FILE"
           else
             echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
           fi
 
+      # --- Backend Build and Zip for Linux (Self-Contained) ---
+      - name: Build and Publish .NET Backend (Linux - Self-Contained)
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend for Linux (Self-Contained)..."
+          dotnet publish --configuration Release --framework net9.0 --runtime linux-x64 --self-contained true --output ./bin/Release/net9.0/publish/linux-sc
+
+      - name: Zip Backend Linux (Self-Contained) Artifacts
+        run: |
+          echo "Zipping backend Linux (Self-Contained) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/linux-sc"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_linux_selfcontained.zip"
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            zip -r "$BACKEND_ZIP_FILE" .
+            echo "Backend Linux (Self-Contained) artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      # --- Backend Build and Zip for Windows (Framework-Dependent) ---
+      - name: Build and Publish .NET Backend (Windows - Framework-Dependent)
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend for Windows (Framework-Dependent)..."
+          dotnet publish --configuration Release --framework net9.0 --runtime win-x64 --self-contained false --output ./bin/Release/net9.0/publish/win-fd
+
+      - name: Zip Backend Windows (Framework-Dependent) Artifacts
+        run: |
+          echo "Zipping backend Windows (Framework-Dependent) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/win-fd"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_win.zip"
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            zip -r "$BACKEND_ZIP_FILE" .
+            echo "Backend Windows (Framework-Dependent) artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      # --- Backend Build and Zip for Windows (Self-Contained) ---
+      - name: Build and Publish .NET Backend (Windows - Self-Contained)
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend for Windows (Self-Contained)..."
+          dotnet publish --configuration Release --framework net9.0 --runtime win-x64 --self-contained true --output ./bin/Release/net9.0/publish/win-sc
+
+      - name: Zip Backend Windows (Self-Contained) Artifacts
+        run: |
+          echo "Zipping backend Windows (Self-Contained) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/win-sc"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_win_selfcontained.zip"
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            zip -r "$BACKEND_ZIP_FILE" .
+            echo "Backend Windows (Self-Contained) artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      # --- Backend Build and Zip for macOS (Framework-Dependent) ---
+      - name: Build and Publish .NET Backend (macOS - Framework-Dependent)
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend for macOS (Framework-Dependent)..."
+          dotnet publish --configuration Release --framework net9.0 --runtime osx-x64 --self-contained false --output ./bin/Release/net9.0/publish/osx-fd
+
+      - name: Zip Backend macOS (Framework-Dependent) Artifacts
+        run: |
+          echo "Zipping backend macOS (Framework-Dependent) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/osx-fd"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_mac.zip"
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            zip -r "$BACKEND_ZIP_FILE" .
+            echo "Backend macOS (Framework-Dependent) artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      # --- Backend Build and Zip for macOS (Self-Contained) ---
+      - name: Build and Publish .NET Backend (macOS - Self-Contained)
+        run: |
+          echo "Navigating to backend directory: backend/fx-backend"
+          cd backend/fx-backend
+          echo "Publishing .NET backend for macOS (Self-Contained)..."
+          dotnet publish --configuration Release --framework net9.0 --runtime osx-x64 --self-contained true --output ./bin/Release/net9.0/publish/osx-sc
+
+      - name: Zip Backend macOS (Self-Contained) Artifacts
+        run: |
+          echo "Zipping backend macOS (Self-Contained) artifacts..."
+          BACKEND_ARTIFACTS_SOURCE="backend/fx-backend/bin/Release/net9.0/publish/osx-sc"
+          BACKEND_ZIP_FILE="${{ github.workspace }}/backend_dist_mac_selfcontained.zip"
+          if [ -d "$BACKEND_ARTIFACTS_SOURCE" ]; then
+            cd "$BACKEND_ARTIFACTS_SOURCE"
+            zip -r "$BACKEND_ZIP_FILE" .
+            echo "Backend macOS (Self-Contained) artifacts zipped to $BACKEND_ZIP_FILE"
+          else
+            echo "Warning: Backend build output directory '$BACKEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
+          fi
+
+      # --- Frontend Build Steps (unchanged) ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use a stable Node.js version, e.g., 20.x
-          # You can specify a package manager here if needed, e.g., cache: 'npm' or cache: 'pnpm'
+          node-version: '20'
+          # cache: 'npm' # Uncomment if you want to cache npm dependencies
 
       - name: Install Frontend Dependencies (npm)
         run: |
           echo "Navigating to frontend directory: frontend"
           cd frontend
           echo "Installing frontend dependencies using npm..."
-          npm install # Using npm as the default package manager
+          npm install
 
       - name: Build Frontend Application
         run: |
           echo "Navigating to frontend directory: frontend"
           cd frontend
           echo "Building frontend application..."
-          npm run build # Assumes your package.json has a 'build' script
+          npm run build
 
       - name: Zip Frontend Build Artifacts
         run: |
           echo "Zipping frontend build artifacts..."
-          # Define the source path for frontend artifacts relative to the repository root
           FRONTEND_ARTIFACTS_SOURCE="frontend/dist"
-          FRONTEND_ZIP_FILE="${{ github.workspace }}/frontend_dist.zip" # Full path to the output zip file
-
+          FRONTEND_ZIP_FILE="${{ github.workspace }}/frontend_dist.zip"
           if [ -d "$FRONTEND_ARTIFACTS_SOURCE" ]; then
-            # Change to the artifacts source directory to zip its contents directly
             cd "$FRONTEND_ARTIFACTS_SOURCE"
-            # Zip contents of the current directory ('.') into the specified output zip file
             zip -r "$FRONTEND_ZIP_FILE" .
             echo "Frontend artifacts zipped to $FRONTEND_ZIP_FILE"
           else
             echo "Warning: Frontend build output directory '$FRONTEND_ARTIFACTS_SOURCE' not found. Skipping zipping."
           fi
 
-      - name: Upload Backend Artifact
+      # --- Upload all Backend and Frontend Artifacts ---
+      - name: Upload All Backend Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: backend-dist
-          path: backend_dist.zip # Path relative to the repository root
+          name: backend-dist-all
+          path: |
+            backend_dist_linux.zip
+            backend_dist_linux_selfcontained.zip
+            backend_dist_win.zip
+            backend_dist_win_selfcontained.zip
+            backend_dist_mac.zip
+            backend_dist_mac_selfcontained.zip
 
       - name: Upload Frontend Artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: frontend_dist.zip # Path relative to the repository root
+          path: frontend_dist.zip
 
+      # --- Create Release with all Artifacts ---
       - name: Create Release
-        # This step will run if the workflow is triggered by a push to the 'main' branch
-        # or if it's manually triggered (workflow_dispatch).
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         uses: softprops/action-gh-release@v1
         with:
-          # Use the provided release_tag input, or generate a dynamic one if not provided.
-          # The dynamic tag uses the run ID and run number for uniqueness.
           tag_name: ${{ github.event.inputs.release_tag || format('v{0}-{1}', github.run_id, github.run_number) }}
           name: Release ${{ github.event.inputs.release_tag || format('v{0}-{1}', github.run_id, github.run_number) }}
           body: |
@@ -119,7 +221,12 @@ jobs:
             Triggered by: ${{ github.event_name }}
             Branch/Tag: ${{ github.ref }}
           files: |
-            backend_dist.zip
+            backend_dist_linux.zip
+            backend_dist_linux_selfcontained.zip
+            backend_dist_win.zip
+            backend_dist_win_selfcontained.zip
+            backend_dist_mac.zip
+            backend_dist_mac_selfcontained.zip
             frontend_dist.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub automatically provides this token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
